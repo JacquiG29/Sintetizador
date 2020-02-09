@@ -71,7 +71,7 @@ bool PluginCore::initPluginParameters()
 	PluginParameter* piParam = nullptr;
 
 	// --- continuous control: Volumen
-	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.900000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&volumen, boundVariableType::kDouble);
@@ -209,7 +209,54 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 
 	if (compareEnumToInt(waveformEnum::square, waveform))
 	{
+		if (fase < pi)
+		{
+			y = Amplitud;
+		}
+		else 
+		{
+			y = -Amplitud;
+		}
+		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
 
+		if (fase>(2*pi)) 
+		{
+			fase = fase - (2 * pi);
+		}
+
+
+	}
+
+	if (compareEnumToInt(waveformEnum::triangle, waveform))
+	{
+		if (fase < pi)
+		{
+			y = -Amplitud+(2*Amplitud/pi)*fase;
+		}
+		else
+		{
+			y = 3*Amplitud - (2 * Amplitud / pi) * fase;
+		}
+
+		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+		
+		if (fase > (2 * pi))
+		{
+			fase = fase - (2 * pi);
+		}
+
+
+	}
+
+	if (compareEnumToInt(waveformEnum::sawtooth, waveform))
+	{
+		y = Amplitud-(Amplitud/pi*fase);
+		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+
+		if (fase > (2 * pi))
+		{
+			fase = fase - (2 * pi);
+		}
 	}
 
 	if (compareEnumToInt(waveformEnum::none, waveform))

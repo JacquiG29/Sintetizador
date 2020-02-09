@@ -1,13 +1,2 @@
-﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  plugincore.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(202,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(205,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(223,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(225,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(237,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(248,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(249,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(259,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(260,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
+﻿     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
   Sinte.vcxproj -> C:\Users\jacqu\AppData\Roaming\RackAFX 7.0\PlugIns\Sinte.rafx2
