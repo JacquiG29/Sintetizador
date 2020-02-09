@@ -20,7 +20,9 @@
 // --- Plugin Variables controlID Enumeration 
 
 enum controlID {
-	volumen = 0
+	volumen = 0,
+	waveform = 1,
+	Frecuencia_Hz = 2
 };
 
 	// **--0x0F1F--**
@@ -103,8 +105,8 @@ public:
 
 	// --- BEGIN USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	//	   Add your variables and methods here
-
-
+	float y = 0;
+	float fase = 0;
 
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 
@@ -113,7 +115,11 @@ private:
 
 	// --- Continuous Plugin Variables 
 	double volumen = 0.0;
+	float Frecuencia_Hz = 0.f;
 
+	// --- Discrete Plugin Variables 
+	int waveform = 0;
+	enum class waveformEnum { sine,square,triangle,sawtooth,none };	// to compare: if(compareEnumToInt(waveformEnum::sine, waveform)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

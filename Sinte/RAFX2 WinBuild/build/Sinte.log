@@ -1,54 +1,13 @@
 ﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  Rafx2PluginBase.cpp
-  Rafx2Plugin.cpp
-  RackAFXDLL.cpp
-  fxobjects.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(333,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(649,12): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(650,12): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(741,11): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(743,15): warning C4018: '>': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(743,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(756,11): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(758,16): warning C4018: '>': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(758,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(771,11): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(771,38): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(773,16): warning C4018: '>': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(773,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(775,16): warning C4018: '>': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(775,44): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(1088,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(1110,12): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(1130,11): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(2788,39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(2839,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(2842,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(2995,20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(3353,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(4888,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(4891,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(4892,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(8704,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginObjects\fxobjects.h(8708,20): warning C4018: '<=': signed/unsigned mismatch
-  pluginparameter.cpp
-  plugingui.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugingui.cpp(1569,61): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   plugincore.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugincore.cpp(201,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugincore.cpp(211,62): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugincore.cpp(212,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugincore.cpp(222,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\PluginKernel\plugincore.cpp(223,63): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  pluginbase.cpp
-  customviews.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\CustomControls\customviews.cpp(80,30): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\CustomControls\customviews.cpp(475,44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  customcontrols.cpp
-  vstgui_win32.cpp
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\vstgui4\vstgui\lib\cview.cpp(1010,1): warning C4996: 'VSTGUI::Animation::Animator::addAnimation': was declared deprecated
-C:\Users\jacqu\Desktop\AUDIO\Sintetizador\vstgui4\vstgui\lib\animation\animator.h(26): message : see declaration of 'VSTGUI::Animation::Animator::addAnimation'
-  vstgui_uidescription_win32.cpp
-  Generating Code...
-     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(202,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(205,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(223,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(225,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(237,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(248,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(249,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(259,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(260,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
   Sinte.vcxproj -> C:\Users\jacqu\AppData\Roaming\RackAFX 7.0\PlugIns\Sinte.rafx2

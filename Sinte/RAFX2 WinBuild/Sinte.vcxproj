@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\vstgui4\vstgui\vstgui_win32.cpp" />
     <ClCompile Include="..\CustomControls\customcontrols.cpp" />
     <ClCompile Include="..\CustomControls\customviews.cpp" />
+    <ClCompile Include="..\PluginKernel\oscilador.cpp" />
     <ClCompile Include="..\PluginKernel\pluginbase.cpp" />
     <ClCompile Include="..\PluginKernel\plugincore.cpp" />
     <ClCompile Include="..\PluginKernel\plugingui.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="..\CustomControls\readerwriterqueue.h" />
     <ClInclude Include="..\CustomControls\customviews.h" />
     <ClInclude Include="..\PluginKernel\guiconstants.h" />
+    <ClInclude Include="..\PluginKernel\oscilador.h" />
     <ClInclude Include="..\PluginKernel\pluginbase.h" />
     <ClInclude Include="..\PluginKernel\plugincore.h" />
     <ClInclude Include="..\PluginKernel\plugindescription.h" />

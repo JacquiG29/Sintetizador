@@ -12,6 +12,7 @@
 // -----------------------------------------------------------------------------
 #include "plugincore.h"
 #include "plugindescription.h"
+#include "oscilador.h"
 
 /**
 \brief PluginCore constructor is launching pad for object initialization
@@ -70,10 +71,23 @@ bool PluginCore::initPluginParameters()
 	PluginParameter* piParam = nullptr;
 
 	// --- continuous control: Volumen
-	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.900000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&volumen, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Waveform
+	piParam = new PluginParameter(controlID::waveform, "Waveform", "sine,square,triangle,sawtooth,none", "none");
+	piParam->setBoundVariable(&waveform, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Frecuencia
+	piParam = new PluginParameter(controlID::Frecuencia_Hz, "Frecuencia", "Hz", controlVariableType::kFloat, 200.000000, 6000.000000, 1000.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&Frecuencia_Hz, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- Aux Attributes
@@ -84,6 +98,16 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(2147483649);
 	setParamAuxAttribute(controlID::volumen, auxAttribute);
+
+	// --- controlID::waveform
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::waveform, auxAttribute);
+
+	// --- controlID::Frecuencia_Hz
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483656);
+	setParamAuxAttribute(controlID::Frecuencia_Hz, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -170,7 +194,30 @@ Operation:
 */
 bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 {
-    // --- fire any MIDI events for this sample interval
+    // Funcion para seleccionar Ocilador
+	double Amplitud = volumen;
+
+	if (compareEnumToInt(waveformEnum::sine, waveform))
+	{	
+		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+		if (fase > 2 * pi)
+		{
+			fase = fase - (2 * pi);
+		}
+		y = sin(fase);
+	}
+
+	if (compareEnumToInt(waveformEnum::square, waveform))
+	{
+
+	}
+
+	if (compareEnumToInt(waveformEnum::none, waveform))
+	{
+		y = 0;
+	}
+
+	// --- fire any MIDI events for this sample interval
     processFrameInfo.midiEventQueue->fireMidiEvents(processFrameInfo.currentFrame);
 
 	// --- do per-frame updates; VST automation and parameter smoothing
@@ -183,21 +230,22 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	if (getPluginType() == kSynthPlugin)
 	{
 		// --- output silence: change this with your signal render code
-		processFrameInfo.audioOutputFrame[0] = 0.0;
+		processFrameInfo.audioOutputFrame[0] = Amplitud * y;
 		if (processFrameInfo.channelIOConfig.outputChannelFormat == kCFStereo)
-			processFrameInfo.audioOutputFrame[1] = 0.0;
+			processFrameInfo.audioOutputFrame[1] = Amplitud * y;
 
 		return true;	/// processed
 	}
 
     // --- FX Plugin:
-	double volumenUsuario = volumen;
+	
 
     if(processFrameInfo.channelIOConfig.inputChannelFormat == kCFMono &&
        processFrameInfo.channelIOConfig.outputChannelFormat == kCFMono)
     {
 		// --- pass through code: change this with your signal processing
-        processFrameInfo.audioOutputFrame[0] = volumenUsuario * processFrameInfo.audioInputFrame[0];
+        processFrameInfo.audioOutputFrame[0] = Amplitud * processFrameInfo.audioInputFrame[0];
+		
 
         return true; /// processed
     }
@@ -207,8 +255,8 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
        processFrameInfo.channelIOConfig.outputChannelFormat == kCFStereo)
     {
 		// --- pass through code: change this with your signal processing
-        processFrameInfo.audioOutputFrame[0] = volumenUsuario*processFrameInfo.audioInputFrame[0];
-        processFrameInfo.audioOutputFrame[1] = volumenUsuario * processFrameInfo.audioInputFrame[0];
+        processFrameInfo.audioOutputFrame[0] = Amplitud *processFrameInfo.audioInputFrame[0];
+        processFrameInfo.audioOutputFrame[1] = Amplitud * processFrameInfo.audioInputFrame[0];
 
         return true; /// processed
     }
@@ -218,8 +266,8 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
        processFrameInfo.channelIOConfig.outputChannelFormat == kCFStereo)
     {
 		// --- pass through code: change this with your signal processing
-        processFrameInfo.audioOutputFrame[0] = volumenUsuario * processFrameInfo.audioInputFrame[0];
-        processFrameInfo.audioOutputFrame[1] = volumenUsuario * processFrameInfo.audioInputFrame[1];
+        processFrameInfo.audioOutputFrame[0] = Amplitud * processFrameInfo.audioInputFrame[0];
+        processFrameInfo.audioOutputFrame[1] = Amplitud * processFrameInfo.audioInputFrame[1];
 
         return true; /// processed
     }
@@ -472,6 +520,14 @@ bool PluginCore::initPluginPresets()
 	int index = 0;
 	PresetInfo* preset = nullptr;
 
+	// --- Preset: Factory Preset
+	preset = new PresetInfo(index++, "Factory Preset");
+	initPresetParameters(preset->presetParameters);
+	setPresetParameter(preset->presetParameters, controlID::volumen, 0.900000);
+	setPresetParameter(preset->presetParameters, controlID::waveform, 1.000000);
+	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 1000.000000);
+	addPreset(preset);
+
 
 	// **--0xA7FF--**
 
@@ -505,7 +561,9 @@ bool PluginCore::initPluginDescriptors()
     apiSpecificInfo.aaxPluginCategoryCode = kAAXCategory;
 
     // --- AU
-    apiSpecificInfo.auBundleID = kAUBundleID;   /* MacOS only: this MUST match the bundle identifier in your info.plist file */
+    apiSpecificInfo.auBundleID = kAUBundleID;
+	apiSpecificInfo.auBundleName = kAUBundleName;
+	apiSpecificInfo.auBundleName = kAUBundleName;   /* MacOS only: this MUST match the bundle identifier in your info.plist file */
     apiSpecificInfo.auBundleName = kAUBundleName;
 
     // --- VST3

@@ -63,6 +63,9 @@
     <ClCompile Include="..\PluginObjects\fxobjects.cpp">
       <Filter>PluginObjects</Filter>
     </ClCompile>
+    <ClCompile Include="..\PluginKernel\oscilador.cpp">
+      <Filter>Plugin Kernel\Plugin Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RAFX2 Source\RackAFXDLL.h">
@@ -116,8 +119,11 @@
     <ClInclude Include="..\CustomControls\readerwriterqueue.h">
       <Filter>CustomControls</Filter>
     </ClInclude>
+    <ClInclude Include="..\PluginKernel\oscilador.h">
+      <Filter>Plugin Kernel\Plugin Core</Filter>
+    </ClInclude>
   </ItemGroup>
-  <ItemGroup> 
+  <ItemGroup>
     <None Include="..\Resources\PluginGUI.uidesc">
       <Filter>Resources</Filter>
     </None>
@@ -128,4 +134,3 @@
     </ResourceCompile>
   </ItemGroup>
 </Project>
-

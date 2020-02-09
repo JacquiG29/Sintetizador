@@ -42,7 +42,7 @@ const char* kShortPluginName = "Sinte";    // 15 chars max for AAX
 const char* kAUBundleName = "Sinte";
 
 // --- type of plugin
-const pluginType kPluginType = pluginType::kFXPlugin;
+const pluginType kPluginType = pluginType::kSynthPlugin;
 
 // --- vendor info
 const char* kVendorName = "RackAFX User";
@@ -70,5 +70,6 @@ const uint32_t kVST3SAAGranularity = 1;
 const uint32_t kAAXCategory = 0;
 
 #endif
+
 
 
