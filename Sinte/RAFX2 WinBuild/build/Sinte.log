@@ -1,2 +1,46 @@
-﻿     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
+﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Rafx2Plugin.cpp
+  RackAFXDLL.cpp
+  plugincore.cpp
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(264,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(267,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(276,9): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(280,9): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(282,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(286,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(296,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(300,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(303,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(307,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(315,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(316,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(320,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(326,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(327,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(331,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(340,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(343,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(352,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(356,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(358,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(362,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(372,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(376,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(379,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(383,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(391,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(392,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(396,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(402,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(403,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(407,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(432,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(434,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(446,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(457,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(458,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(468,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(469,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+     Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
   Sinte.vcxproj -> C:\Users\jacqu\AppData\Roaming\RackAFX 7.0\PlugIns\Sinte.rafx2

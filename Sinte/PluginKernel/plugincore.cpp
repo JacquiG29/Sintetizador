@@ -77,17 +77,48 @@ bool PluginCore::initPluginParameters()
 	piParam->setBoundVariable(&volumen, boundVariableType::kDouble);
 	addPluginParameter(piParam);
 
-	// --- discrete control: Waveform
-	piParam = new PluginParameter(controlID::waveform, "Waveform", "sine,square,triangle,sawtooth,none", "none");
+	// --- discrete control: Waveform_Osc1
+	piParam = new PluginParameter(controlID::waveform, "Waveform_Osc1", "sine,square,triangle,sawtooth,sawtooth inverse", "sine");
 	piParam->setBoundVariable(&waveform, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
 	// --- continuous control: Frecuencia
-	piParam = new PluginParameter(controlID::Frecuencia_Hz, "Frecuencia", "Hz", controlVariableType::kFloat, 200.000000, 6000.000000, 1000.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::Frecuencia_Hz, "Frecuencia", "Hz", controlVariableType::kFloat, 200.000000, 6000.000000, 500.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&Frecuencia_Hz, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Oscilador_1
+	piParam = new PluginParameter(controlID::osc1_on, "Oscilador_1", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&osc1_on, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Waveform_Osc2
+	piParam = new PluginParameter(controlID::wave2, "Waveform_Osc2", "sine,square,triangle,sawtooth,sawtooth inverse", "sine");
+	piParam->setBoundVariable(&wave2, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Frecuencia_Osc2
+	piParam = new PluginParameter(controlID::frec2, "Frecuencia_Osc2", "Units", controlVariableType::kFloat, 100.000000, 6000.000000, 500.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&frec2, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Oscilador_2
+	piParam = new PluginParameter(controlID::osc2_on, "Oscilador_2", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&osc2_on, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Mute
+	piParam = new PluginParameter(controlID::enableMute, "Mute", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&enableMute, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
 	// --- Aux Attributes
@@ -108,6 +139,35 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(2147483656);
 	setParamAuxAttribute(controlID::Frecuencia_Hz, auxAttribute);
+
+	auxAttribute.reset(auxGUIIdentifier::midiControlData);
+	auxAttribute.setUintAttribute(2147680256);
+	setParamAuxAttribute(controlID::Frecuencia_Hz, auxAttribute);
+
+	// --- controlID::osc1_on
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741827);
+	setParamAuxAttribute(controlID::osc1_on, auxAttribute);
+
+	// --- controlID::wave2
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::wave2, auxAttribute);
+
+	// --- controlID::frec2
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483660);
+	setParamAuxAttribute(controlID::frec2, auxAttribute);
+
+	// --- controlID::osc2_on
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741827);
+	setParamAuxAttribute(controlID::osc2_on, auxAttribute);
+
+	// --- controlID::enableMute
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741829);
+	setParamAuxAttribute(controlID::enableMute, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -197,72 +257,164 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
     // Funcion para seleccionar Ocilador
 	double Amplitud = volumen;
 
-	if (compareEnumToInt(waveformEnum::sine, waveform))
-	{	
-		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-		if (fase > 2 * pi)
-		{
-			fase = fase - (2 * pi);
-		}
-		y = sin(fase);
-	}
-
-	if (compareEnumToInt(waveformEnum::square, waveform))
+	if (osc1_on == 1)
 	{
-		if (fase < pi)
+		if (compareEnumToInt(waveformEnum::sine, waveform))
 		{
-			y = Amplitud;
-		}
-		else 
-		{
-			y = -Amplitud;
-		}
-		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-		if (fase>(2*pi)) 
-		{
-			fase = fase - (2 * pi);
+			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+			if (fase > 2 * pi)
+			{
+				fase = fase - (2 * pi);
+			}
+			y = sin(fase);
 		}
 
+		if (compareEnumToInt(waveformEnum::square, waveform))
+		{
+			if (fase < pi)
+			{
+				y = Amplitud;
+			}
+			else
+			{
+				y = -Amplitud;
+			}
+			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
 
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+
+
+		}
+
+		if (compareEnumToInt(waveformEnum::triangle, waveform))
+		{
+			if (fase < pi)
+			{
+				y = -Amplitud + (2 * Amplitud / pi) * fase;
+			}
+			else
+			{
+				y = 3 * Amplitud - (2 * Amplitud / pi) * fase;
+			}
+
+			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+
+
+		}
+
+		if (compareEnumToInt(waveformEnum::sawtooth, waveform))
+		{
+			y = Amplitud - (Amplitud / pi * fase);
+			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		}
+
+		if (compareEnumToInt(waveformEnum::sawtooth_inverse, waveform))
+		{
+			y = -Amplitud + (Amplitud / pi * fase);
+			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		}
 	}
 
-	if (compareEnumToInt(waveformEnum::triangle, waveform))
+	if (osc2_on == 1)
 	{
-		if (fase < pi)
+		if (compareEnumToInt(wave2Enum::sine, wave2))
 		{
-			y = -Amplitud+(2*Amplitud/pi)*fase;
-		}
-		else
-		{
-			y = 3*Amplitud - (2 * Amplitud / pi) * fase;
-		}
-
-		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-		
-		if (fase > (2 * pi))
-		{
-			fase = fase - (2 * pi);
+			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
+			if (fase2 > 2 * pi)
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+			y2 = sin(fase2);
 		}
 
+		if (compareEnumToInt(wave2Enum::square, wave2))
+		{
+			if (fase2 < pi)
+			{
+				y2 = Amplitud;
+			}
+			else
+			{
+				y2 = -Amplitud;
+			}
+			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
 
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+
+
+		}
+
+		if (compareEnumToInt(wave2Enum::triangle, wave2))
+		{
+			if (fase2 < pi)
+			{
+				y2 = -Amplitud + (2 * Amplitud / pi) * fase2;
+			}
+			else
+			{
+				y2 = 3 * Amplitud - (2 * Amplitud / pi) * fase2;
+			}
+
+			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+
+
+		}
+
+		if (compareEnumToInt(wave2Enum::sawtooth, wave2))
+		{
+			y2 = Amplitud - (Amplitud / pi * fase2);
+			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+		}
+
+		if (compareEnumToInt(wave2Enum::sawtooth_inverse, wave2))
+		{
+			y2 = -Amplitud + (Amplitud / pi * fase2);
+			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+		}
 	}
 
-	if (compareEnumToInt(waveformEnum::sawtooth, waveform))
+	if (enableMute == 1)
 	{
-		y = Amplitud-(Amplitud/pi*fase);
-		fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-		if (fase > (2 * pi))
-		{
-			fase = fase - (2 * pi);
-		}
+		y = 0.0;
+		y2 = 0.0;
 	}
 
-	if (compareEnumToInt(waveformEnum::none, waveform))
-	{
-		y = 0;
-	}
 
 	// --- fire any MIDI events for this sample interval
     processFrameInfo.midiEventQueue->fireMidiEvents(processFrameInfo.currentFrame);
@@ -277,9 +429,9 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	if (getPluginType() == kSynthPlugin)
 	{
 		// --- output silence: change this with your signal render code
-		processFrameInfo.audioOutputFrame[0] = Amplitud * y;
+		processFrameInfo.audioOutputFrame[0] = Amplitud * (y+y2);
 		if (processFrameInfo.channelIOConfig.outputChannelFormat == kCFStereo)
-			processFrameInfo.audioOutputFrame[1] = Amplitud * y;
+			processFrameInfo.audioOutputFrame[1] = Amplitud * (y + y2);
 
 		return true;	/// processed
 	}
@@ -570,9 +722,14 @@ bool PluginCore::initPluginPresets()
 	// --- Preset: Factory Preset
 	preset = new PresetInfo(index++, "Factory Preset");
 	initPresetParameters(preset->presetParameters);
-	setPresetParameter(preset->presetParameters, controlID::volumen, 0.900000);
-	setPresetParameter(preset->presetParameters, controlID::waveform, 1.000000);
-	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 1000.000000);
+	setPresetParameter(preset->presetParameters, controlID::volumen, 0.500000);
+	setPresetParameter(preset->presetParameters, controlID::waveform, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 500.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc1_on, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::wave2, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::frec2, 500.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc2_on, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::enableMute, -0.000000);
 	addPreset(preset);
 
 

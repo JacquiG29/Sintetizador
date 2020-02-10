@@ -22,7 +22,12 @@
 enum controlID {
 	volumen = 0,
 	waveform = 1,
-	Frecuencia_Hz = 2
+	Frecuencia_Hz = 2,
+	osc1_on = 3,
+	wave2 = 4,
+	frec2 = 5,
+	osc2_on = 6,
+	enableMute = 7
 };
 
 	// **--0x0F1F--**
@@ -108,6 +113,9 @@ public:
 	float y = 0;
 	float fase = 0;
 
+	float y2 = 0;
+	float fase2 = 0;
+
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 
 private:
@@ -116,10 +124,23 @@ private:
 	// --- Continuous Plugin Variables 
 	double volumen = 0.0;
 	float Frecuencia_Hz = 0.f;
+	float frec2 = 0.f;
 
 	// --- Discrete Plugin Variables 
 	int waveform = 0;
-	enum class waveformEnum { sine,square,triangle,sawtooth,none };	// to compare: if(compareEnumToInt(waveformEnum::sine, waveform)) etc... 
+	enum class waveformEnum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(waveformEnum::sine, waveform)) etc... 
+
+	int osc1_on = 0;
+	enum class osc1_onEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(osc1_onEnum::SWITCH_OFF, osc1_on)) etc... 
+
+	int wave2 = 0;
+	enum class wave2Enum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(wave2Enum::sine, wave2)) etc... 
+
+	int osc2_on = 0;
+	enum class osc2_onEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(osc2_onEnum::SWITCH_OFF, osc2_on)) etc... 
+
+	int enableMute = 0;
+	enum class enableMuteEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(enableMuteEnum::SWITCH_OFF, enableMute)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables
