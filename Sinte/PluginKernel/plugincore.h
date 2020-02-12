@@ -114,15 +114,21 @@ public:
 
 	// --- BEGIN USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	//	   Add your variables and methods here
-	float y = 0;
-	float fase = 0;
-	float lfo_f = 0;
+	double y = 0;
+	double fase = 0;
+	double lfo_f = 0;
+	double phase = 0;
+	double amount = 0;
+	double n = 0;
+	double numSamples = 100;
+	double fase_lfo = 0;
+	double out_sin = 0;
 
-	float y2 = 0;
-	float fase2 = 0;
+	double y2 = 0;
+	double fase2 = 0;
 
-	float salida = 0;
-	float prueba;
+	double salida = 0;
+	double prueba;
 
 	double m_n;
 	double y_n;
@@ -158,7 +164,7 @@ private:
 	enum class lfo_1Enum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(lfo_1Enum::SWITCH_OFF, lfo_1)) etc... 
 
 	int lfo_selec = 0;
-	enum class lfo_selecEnum { pitch,pmw,volume,cut_off,pan };	// to compare: if(compareEnumToInt(lfo_selecEnum::pitch, lfo_selec)) etc... 
+	enum class lfo_selecEnum { pitch,vibrato,tremolo };	// to compare: if(compareEnumToInt(lfo_selecEnum::pitch, lfo_selec)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

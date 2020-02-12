@@ -135,7 +135,7 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- discrete control: Select_LFO
-	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "pitch,pmw,volume,cut off,pan", "pitch");
+	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "pitch,vibrato,tremolo", "pitch");
 	piParam->setBoundVariable(&lfo_selec, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
@@ -478,27 +478,44 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 
 	if (lfo_1 == 1) 
 	{
-		if (compareEnumToInt(lfo_selecEnum::pitch, lfo_selec)) 
+		fase_lfo = fase_lfo + (2 * pi * lfo_frec) / audioProcDescriptor.sampleRate;
+		if (fase_lfo > 2 * pi)
 		{
-			lfo_f = 2 * pi * lfo_frec / audioProcDescriptor.sampleRate;
-			float phase=0;
-			int n=0;
-	
-			int numSamples = 1000;
-			for (n = 0; n < numSamples; n++) 
-			{
-				m_n = 1.0 + amount_lfo * cos(phase);
-				y_n = m_n* (y + y2);
-				phase = phase + lfo_f;
-			
+			fase_lfo = fase_lfo - (2 * pi);
+		}
+		out_sin = sin(fase_lfo);
+
+		if (compareEnumToInt(lfo_selecEnum::tremolo, lfo_selec)) 
+		{
+			amount = double(amount_lfo);
+			m_n = 1.0 + amount * cos(phase);
+			y_n = m_n*out_sin;
+
+			lfo_f = (2 * pi * lfo_frec * n) / audioProcDescriptor.sampleRate;
+			phase = phase + lfo_f ;
+
+			if (n < numSamples) {
+				n = n + 1;
+			}
+			else {
+				n = 0;
 			}
 			
 		}
+		else if (compareEnumToInt(lfo_selecEnum::vibrato, lfo_selec)) 
+		{
+			
+		}
+
+	}
+	else 
+	{
+		y_n = 1;
 	
 	}
 
+	salida = (y + y2) *y_n;
 
-	salida = (y + y2);
 
 
 
