@@ -27,7 +27,11 @@ enum controlID {
 	wave2 = 4,
 	frec2 = 5,
 	osc2_on = 6,
-	enableMute = 7
+	enableMute = 7,
+	lfo_1 = 10,
+	amount_lfo = 11,
+	lfo_selec = 12,
+	lfo_frec = 13
 };
 
 	// **--0x0F1F--**
@@ -112,10 +116,16 @@ public:
 	//	   Add your variables and methods here
 	float y = 0;
 	float fase = 0;
+	float lfo_f = 0;
 
 	float y2 = 0;
 	float fase2 = 0;
 
+	float salida = 0;
+	float prueba;
+
+	double m_n;
+	double y_n;
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 
 private:
@@ -125,6 +135,8 @@ private:
 	double volumen = 0.0;
 	float Frecuencia_Hz = 0.f;
 	float frec2 = 0.f;
+	float amount_lfo = 0.f;
+	float lfo_frec = 0.f;
 
 	// --- Discrete Plugin Variables 
 	int waveform = 0;
@@ -141,6 +153,12 @@ private:
 
 	int enableMute = 0;
 	enum class enableMuteEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(enableMuteEnum::SWITCH_OFF, enableMute)) etc... 
+
+	int lfo_1 = 0;
+	enum class lfo_1Enum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(lfo_1Enum::SWITCH_OFF, lfo_1)) etc... 
+
+	int lfo_selec = 0;
+	enum class lfo_selecEnum { pitch,pmw,volume,cut_off,pan };	// to compare: if(compareEnumToInt(lfo_selecEnum::pitch, lfo_selec)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables
