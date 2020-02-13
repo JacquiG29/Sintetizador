@@ -13,6 +13,7 @@
 #include "plugincore.h"
 #include "plugindescription.h"
 #include "oscilador.h"
+#include <string>
 
 /**
 \brief PluginCore constructor is launching pad for object initialization
@@ -135,7 +136,7 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- discrete control: Select_LFO
-	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "pitch,vibrato,tremolo", "pitch");
+	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "vibrato,tremolo", "vibrato");
 	piParam->setBoundVariable(&lfo_selec, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
@@ -145,6 +146,12 @@ bool PluginCore::initPluginParameters()
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&lfo_frec, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- discrete control: LFO_frec
+	piParam = new PluginParameter(controlID::LFO_frec, "LFO_frec", "sine,square,triangle,sawtooth,sawtooth inverse", "sine");
+	piParam->setBoundVariable(&LFO_frec, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
 	// --- Aux Attributes
@@ -214,6 +221,11 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(2147483650);
 	setParamAuxAttribute(controlID::lfo_frec, auxAttribute);
+
+	// --- controlID::LFO_frec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::LFO_frec, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -298,11 +310,14 @@ Operation:
 
 \return true if operation succeeds, false otherwise
 */
+
+
 bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 {
 	// Funcion para seleccionar Ocilador
-	double Amplitud = volumen;
 	double trem = 0;
+	double Amplitud = volumen;
+
 	if (enableMute == 1)
 	{
 		y = 0;
@@ -311,77 +326,27 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	{
 		if (compareEnumToInt(waveformEnum::sine, waveform))
 		{
-			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-			if (fase > 2 * pi)
-			{
-				fase = fase - (2 * pi);
-			}
-			y = sin(fase);
+			y=Waves(Frecuencia_Hz, 1,Amplitud);
 		}
 
 		else if (compareEnumToInt(waveformEnum::square, waveform))
 		{
-			if (fase < pi)
-			{
-				y = Amplitud;
-			}
-			else
-			{
-				y = -Amplitud;
-			}
-			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-			if (fase > (2 * pi))
-			{
-				fase = fase - (2 * pi);
-			}
-
-
+			y = Waves(Frecuencia_Hz, 2, Amplitud);
 		}
 
 		else if (compareEnumToInt(waveformEnum::triangle, waveform))
 		{
-			if (fase < pi)
-			{
-				y = -Amplitud + (2 * Amplitud / pi) * fase;
-			}
-			else
-			{
-				y = 3 * Amplitud - (2 * Amplitud / pi) * fase;
-			}
-
-			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-			if (fase > (2 * pi))
-			{
-				fase = fase - (2 * pi);
-			}
-
-
-
-
+			y = Waves(Frecuencia_Hz, 3, Amplitud);
 		}
 
 		else if (compareEnumToInt(waveformEnum::sawtooth, waveform))
 		{
-			y = Amplitud - (Amplitud / pi * fase);
-			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-			if (fase > (2 * pi))
-			{
-				fase = fase - (2 * pi);
-			}
+			y = Waves(Frecuencia_Hz, 4, Amplitud);
 		}
 
 		else if (compareEnumToInt(waveformEnum::sawtooth_inverse, waveform))
 		{
-			y = -Amplitud + (Amplitud / pi * fase);
-			fase = fase + (2 * pi * Frecuencia_Hz) / audioProcDescriptor.sampleRate;
-
-			if (fase > (2 * pi))
-			{
-				fase = fase - (2 * pi);
-			}
+			y = Waves(Frecuencia_Hz, 5, Amplitud);
 		}
 
 	}
@@ -398,77 +363,29 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	{
 		if (compareEnumToInt(wave2Enum::sine, wave2))
 		{
-			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
-			if (fase2 > 2 * pi)
-			{
-				fase2 = fase2 - (2 * pi);
-			}
-			y2 = sin(fase2);
+			y2 = Waves2(frec2, 1, Amplitud);
 		}
 
 		else if (compareEnumToInt(wave2Enum::square, wave2))
 		{
-			if (fase2 < pi)
-			{
-				y2 = Amplitud;
-			}
-			else
-			{
-				y2 = -Amplitud;
-			}
-			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
-
-			if (fase2 > (2 * pi))
-			{
-				fase2 = fase2 - (2 * pi);
-			}
-
+			y2 = Waves2(frec2, 2, Amplitud);
 
 		}
 
 		else if (compareEnumToInt(wave2Enum::triangle, wave2))
 		{
-			if (fase2 < pi)
-			{
-				y2 = -Amplitud + (2 * Amplitud / pi) * fase2;
-			}
-			else
-			{
-				y2 = 3 * Amplitud - (2 * Amplitud / pi) * fase2;
-			}
-
-			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
-
-			if (fase2 > (2 * pi))
-			{
-				fase2 = fase2 - (2 * pi);
-			}
-
-
+			y2 = Waves2(frec2, 3, Amplitud);
 		}
 
 		else if (compareEnumToInt(wave2Enum::sawtooth, wave2))
 		{
-			y2 = Amplitud - (Amplitud / pi * fase2);
-			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
-
-			if (fase2 > (2 * pi))
-			{
-				fase2 = fase2 - (2 * pi);
-			}
+			y2 = Waves2(frec2, 4, Amplitud);
 		}
 
 		else if (compareEnumToInt(wave2Enum::sawtooth_inverse, wave2))
 		{
-			y2 = -Amplitud + (Amplitud / pi * fase2);
-			fase2 = fase2 + (2 * pi * frec2) / audioProcDescriptor.sampleRate;
-
-			if (fase2 > (2 * pi))
-			{
-				fase2 = fase2 - (2 * pi);
-			}
+			y2 = Waves2(frec2, 5, Amplitud);
 		}
-
 	}
 	else
 	{
@@ -478,12 +395,27 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 
 	if (lfo_1 == 1) 
 	{
-		fase_lfo = fase_lfo + (2 * pi * lfo_frec) / audioProcDescriptor.sampleRate;
-		if (fase_lfo > 2 * pi)
+		if (compareEnumToInt(LFO_frecEnum::sine, LFO_frec)) 
 		{
-			fase_lfo = fase_lfo - (2 * pi);
+			out_sin = Waves3(lfo_frec, 1, Amplitud);
 		}
-		out_sin = sin(fase_lfo);
+		else if (compareEnumToInt(LFO_frecEnum::square, LFO_frec))
+		{
+			out_sin = Waves3(lfo_frec, 2, Amplitud);
+		}
+		else if (compareEnumToInt(LFO_frecEnum::triangle, LFO_frec))
+		{
+			out_sin = Waves3(lfo_frec, 3, Amplitud);
+		}
+		else if (compareEnumToInt(LFO_frecEnum::sawtooth, LFO_frec))
+		{
+			out_sin = Waves3(lfo_frec, 4, Amplitud);
+		}
+		else if (compareEnumToInt(LFO_frecEnum::sawtooth_inverse, LFO_frec))
+		{
+			out_sin = Waves3(lfo_frec, 5, Amplitud);
+		}
+		
 
 		if (compareEnumToInt(lfo_selecEnum::tremolo, lfo_selec)) 
 		{
@@ -837,6 +769,7 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::amount_lfo, 0.300000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_selec, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_frec, 5.000000);
+	setPresetParameter(preset->presetParameters, controlID::LFO_frec, 0.000000);
 	addPreset(preset);
 
 
@@ -888,6 +821,8 @@ bool PluginCore::initPluginDescriptors()
 
     return true;
 }
+
+
 
 // --- static functions required for VST3/AU only --------------------------------------------- //
 const char* PluginCore::getPluginBundleName() { return kAUBundleName; }

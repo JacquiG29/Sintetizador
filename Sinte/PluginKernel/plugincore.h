@@ -14,6 +14,8 @@
 #define __pluginCore_h__
 
 #include "pluginbase.h"
+#include "oscilador.h"
+#include <stdio.h>
 
 // **--0x7F1F--**
 
@@ -31,7 +33,8 @@ enum controlID {
 	lfo_1 = 10,
 	amount_lfo = 11,
 	lfo_selec = 12,
-	lfo_frec = 13
+	lfo_frec = 13,
+	LFO_frec = 14
 };
 
 	// **--0x0F1F--**
@@ -114,24 +117,246 @@ public:
 
 	// --- BEGIN USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	//	   Add your variables and methods here
+	//Variables para Osciladores
 	double y = 0;
-	double fase = 0;
+	double fase1 = 0;
+
+	double y2 = 0;
+	double fase2=0;
+	
+	double salida = 0;
+	double out;
+	
+	//variables para implementar lfo tipo tremolo
 	double lfo_f = 0;
 	double phase = 0;
 	double amount = 0;
 	double n = 0;
 	double numSamples = 100;
-	double fase_lfo = 0;
+	double fase_lfo=0;
 	double out_sin = 0;
-
-	double y2 = 0;
-	double fase2 = 0;
-
-	double salida = 0;
-	double prueba;
 
 	double m_n;
 	double y_n;
+
+	double fase = 0;
+	//------------FUNCION PARA GENERAR ONDAS EN OSCILADOR Y LFO--------------------------
+	double Waves(double frecuencia, int tipo,double vol)
+	{
+		//inicializar variable, quiero que esto solo suceda una vez
+
+		if (tipo == 1)
+		{
+			fase = fase + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+			if (fase > 2 * pi)
+			{
+				fase = fase - (2 * pi);
+			}
+			out = sin(fase);
+		}
+		else if (tipo == 2) 
+		{
+			if (fase < pi)
+			{
+				out = vol;
+			}
+			else
+			{
+				out = -vol;
+			}
+			fase = fase + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		}
+		else if (tipo == 3) 
+		{
+			if (fase < pi)
+			{
+				out = -vol + (2 * vol / pi) * fase;
+			}
+			else
+			{
+				out = 3 * vol - (2 * vol / pi) * fase;
+			}
+
+			fase = fase + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		
+		}
+		else if (tipo == 4) 
+		{	
+			out = vol - (vol / pi * fase);
+			fase = fase + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		}
+		else if (tipo == 5)
+		{
+			out = -vol + (vol / pi * fase);
+			fase = fase + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase > (2 * pi))
+			{
+				fase = fase - (2 * pi);
+			}
+		}
+
+		return out;
+	}
+	double Waves2(double frecuencia, int tipo, double vol)
+	{
+		//inicializar variable, quiero que esto solo suceda una vez
+
+		if (tipo == 1)
+		{
+			fase2 = fase2 + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+			if (fase2 > 2 * pi)
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+			out = sin(fase2);
+		}
+		else if (tipo == 2)
+		{
+			if (fase2 < pi)
+			{
+				out = vol;
+			}
+			else
+			{
+				out = -vol;
+			}
+			fase2 = fase2 + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+		}
+		else if (tipo == 3)
+		{
+			if (fase2 < pi)
+			{
+				out = -vol + (2 * vol / pi) * fase2;
+			}
+			else
+			{
+				out = 3 * vol - (2 * vol / pi) * fase2;
+			}
+
+			fase2 = fase2 + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+
+		}
+		else if (tipo == 4)
+		{
+			out = vol - (vol / pi * fase2);
+			fase2 = fase2 + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+		}
+		else if (tipo == 5)
+		{
+			out = -vol + (vol / pi * fase2);
+			fase2 = fase2 + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase2 > (2 * pi))
+			{
+				fase2 = fase2 - (2 * pi);
+			}
+		}
+
+		return out;
+	}
+	double Waves3(double frecuencia, int tipo, double vol)
+	{
+		//inicializar variable, quiero que esto solo suceda una vez
+
+		if (tipo == 1)
+		{
+			fase_lfo = fase_lfo + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+			if (fase_lfo > 2 * pi)
+			{
+				fase_lfo = fase_lfo - (2 * pi);
+			}
+			out = sin(fase_lfo);
+		}
+		else if (tipo == 2)
+		{
+			if (fase_lfo < pi)
+			{
+				out = vol;
+			}
+			else
+			{
+				out = -vol;
+			}
+			fase_lfo = fase_lfo + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase_lfo > (2 * pi))
+			{
+				fase_lfo = fase_lfo - (2 * pi);
+			}
+		}
+		else if (tipo == 3)
+		{
+			if (fase_lfo < pi)
+			{
+				out = -vol + (2 * vol / pi) * fase_lfo;
+			}
+			else
+			{
+				out = 3 * vol - (2 * vol / pi) * fase_lfo;
+			}
+
+			fase_lfo = fase_lfo + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase_lfo > (2 * pi))
+			{
+				fase_lfo = fase_lfo - (2 * pi);
+			}
+
+		}
+		else if (tipo == 4)
+		{
+			out = vol - (vol / pi * fase_lfo);
+			fase_lfo = fase_lfo + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase_lfo > (2 * pi))
+			{
+				fase_lfo = fase_lfo - (2 * pi);
+			}
+		}
+		else if (tipo == 5)
+		{
+			out = -vol + (vol / pi * fase_lfo);
+			fase_lfo = fase_lfo + (2 * pi * frecuencia) / audioProcDescriptor.sampleRate;
+
+			if (fase_lfo > (2 * pi))
+			{
+				fase_lfo = fase_lfo - (2 * pi);
+			}
+		}
+
+		return out;
+	}
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 
 private:
@@ -164,7 +389,10 @@ private:
 	enum class lfo_1Enum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(lfo_1Enum::SWITCH_OFF, lfo_1)) etc... 
 
 	int lfo_selec = 0;
-	enum class lfo_selecEnum { pitch,vibrato,tremolo };	// to compare: if(compareEnumToInt(lfo_selecEnum::pitch, lfo_selec)) etc... 
+	enum class lfo_selecEnum { vibrato,tremolo };	// to compare: if(compareEnumToInt(lfo_selecEnum::vibrato, lfo_selec)) etc... 
+
+	int LFO_frec = 0;
+	enum class LFO_frecEnum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(LFO_frecEnum::sine, LFO_frec)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables
