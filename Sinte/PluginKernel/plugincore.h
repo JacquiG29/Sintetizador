@@ -34,7 +34,8 @@ enum controlID {
 	amount_lfo = 11,
 	lfo_selec = 12,
 	lfo_frec = 13,
-	LFO_frec = 14
+	LFO_frec = 14,
+	BP_filter = 20
 };
 
 	// **--0x0F1F--**
@@ -117,6 +118,7 @@ public:
 
 	// --- BEGIN USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	//	   Add your variables and methods here
+	
 	//Variables para Osciladores
 	double y = 0;
 	double fase1 = 0;
@@ -126,8 +128,9 @@ public:
 	
 	double salida = 0;
 	double out;
+	double osciladores = 0;
 	
-	//variables para implementar lfo tipo tremolo
+	//variables para implementar LFO tipo tremolo
 	double lfo_f = 0;
 	double phase = 0;
 	double amount = 0;
@@ -140,6 +143,33 @@ public:
 	double y_n;
 
 	double fase = 0;
+	//VARIABLES PARA FILTROS
+	double a0 = 1;
+	
+	double x_n_1 = 0;
+	double x_n_2 = 0;
+	double y_n_1 = 0;
+	double y_n1_1 = 0;
+	double y_n2_1 = 0;
+	double OUT_BPF = 0;
+
+	//variables para filtro pasa bandas
+	double Q_1 = 0;
+	double fch_1 = 1500;//frecuencia high
+	double fcl_1 = 1000;//frecuencia low
+	double fc_1 = 0;//frecuencia de corte
+	double fb_1 = 0;//banda de frecuencias
+	double k_1 = 0;
+
+	double b0_1 = 0;
+	double b1_1 = 0;
+	double b2_1 = 0;
+	double a2_1 = 0;
+	double a1_1 = 0;
+
+	double ganancia = 10;
+
+
 	//------------FUNCION PARA GENERAR ONDAS EN OSCILADOR Y LFO--------------------------
 	double Waves(double frecuencia, int tipo,double vol)
 	{
@@ -358,6 +388,7 @@ public:
 		return out;
 	}
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
+	
 
 private:
 	//  **--0x07FD--**
@@ -393,6 +424,9 @@ private:
 
 	int LFO_frec = 0;
 	enum class LFO_frecEnum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(LFO_frecEnum::sine, LFO_frec)) etc... 
+
+	int BP_filter = 0;
+	enum class BP_filterEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(BP_filterEnum::SWITCH_OFF, BP_filter)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

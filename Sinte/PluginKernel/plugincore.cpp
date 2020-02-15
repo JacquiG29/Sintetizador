@@ -154,6 +154,12 @@ bool PluginCore::initPluginParameters()
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
+	// --- discrete control: Filtro_Pasa_Bandas
+	piParam = new PluginParameter(controlID::BP_filter, "Filtro_Pasa_Bandas", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&BP_filter, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
 	// --- Aux Attributes
 	AuxParameterAttribute auxAttribute;
 
@@ -226,6 +232,11 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(805306368);
 	setParamAuxAttribute(controlID::LFO_frec, auxAttribute);
+
+	// --- controlID::BP_filter
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741826);
+	setParamAuxAttribute(controlID::BP_filter, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -446,9 +457,33 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	
 	}
 
-	salida = (y + y2) *y_n;
+	osciladores = (y + y2) *y_n;
 
+	if (BP_filter == 1) 
+	{
+		double fs = audioProcDescriptor.sampleRate;
+		fb_1 = fch_1 - fcl_1;
+		fc_1 = (fch_1 + fcl_1) / 2;
+		Q_1 = fc_1 / fb_1;
+		k_1 = tan((pi * fc_1) / fs);
 
+		b0_1 = k_1 / ((k_1 * k_1 * Q_1) + k_1 + Q_1);
+		b2_1 = (-1 * k_1) / ((k_1 * k_1 * Q_1) + k_1 + Q_1);
+		a1_1 = (2 * Q_1 * (k_1 * k_1 - 1)) / ((k_1 * k_1 * Q_1) + k_1 + Q_1);
+		a2_1 = ((k_1 * k_1 * Q_1) - k_1 + Q_1) / ((k_1 * k_1 * Q_1) + k_1 + Q_1);
+
+		salida = ganancia*((b0_1 * osciladores + b2_1 * x_n_2 - a1_1 * y_n1_1 - a2_1 * y_n2_1) / a0);
+		y_n2_1 = y_n1_1;
+		y_n1_1 = y_n_1;
+
+		x_n_2 = x_n_1;
+		x_n_1 = osciladores;
+	}
+	else 
+	{
+		salida = osciladores;
+	}
+	
 
 
 	// --- fire any MIDI events for this sample interval
@@ -769,7 +804,8 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::amount_lfo, 0.300000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_selec, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_frec, 5.000000);
-	setPresetParameter(preset->presetParameters, controlID::LFO_frec, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::LFO_frec, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::BP_filter, 0.000000);
 	addPreset(preset);
 
 
