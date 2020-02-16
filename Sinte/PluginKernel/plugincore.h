@@ -34,7 +34,7 @@ enum controlID {
 	amount_lfo = 11,
 	lfo_selec = 12,
 	lfo_frec = 13,
-	LFO_frec = 14,
+	waveLFO = 14,
 	BP_filter = 20
 };
 
@@ -422,8 +422,8 @@ private:
 	int lfo_selec = 0;
 	enum class lfo_selecEnum { vibrato,tremolo };	// to compare: if(compareEnumToInt(lfo_selecEnum::vibrato, lfo_selec)) etc... 
 
-	int LFO_frec = 0;
-	enum class LFO_frecEnum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(LFO_frecEnum::sine, LFO_frec)) etc... 
+	int waveLFO = 0;
+	enum class waveLFOEnum { sine,square,triangle,sawtooth,sawtooth_inverse };	// to compare: if(compareEnumToInt(waveLFOEnum::sine, waveLFO)) etc... 
 
 	int BP_filter = 0;
 	enum class BP_filterEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(BP_filterEnum::SWITCH_OFF, BP_filter)) etc... 

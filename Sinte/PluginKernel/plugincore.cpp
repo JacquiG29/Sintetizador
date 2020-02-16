@@ -136,7 +136,7 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- discrete control: Select_LFO
-	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "vibrato,tremolo", "vibrato");
+	piParam = new PluginParameter(controlID::lfo_selec, "Select_LFO", "vibrato,tremolo", "tremolo");
 	piParam->setBoundVariable(&lfo_selec, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
@@ -149,8 +149,8 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- discrete control: LFO_frec
-	piParam = new PluginParameter(controlID::LFO_frec, "LFO_frec", "sine,square,triangle,sawtooth,sawtooth inverse", "sine");
-	piParam->setBoundVariable(&LFO_frec, boundVariableType::kInt);
+	piParam = new PluginParameter(controlID::waveLFO, "LFO_frec", "sine,square,triangle,sawtooth,sawtooth inverse", "sine");
+	piParam->setBoundVariable(&waveLFO, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
@@ -228,10 +228,10 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.setUintAttribute(2147483650);
 	setParamAuxAttribute(controlID::lfo_frec, auxAttribute);
 
-	// --- controlID::LFO_frec
+	// --- controlID::waveLFO
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(805306368);
-	setParamAuxAttribute(controlID::LFO_frec, auxAttribute);
+	setParamAuxAttribute(controlID::waveLFO, auxAttribute);
 
 	// --- controlID::BP_filter
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
@@ -355,7 +355,7 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 			y = Waves(Frecuencia_Hz, 4, Amplitud);
 		}
 
-		else if (compareEnumToInt(waveformEnum::sawtooth_inverse, waveform))
+		else if(compareEnumToInt(waveformEnum::sawtooth_inverse, waveform))
 		{
 			y = Waves(Frecuencia_Hz, 5, Amplitud);
 		}
@@ -406,23 +406,23 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 
 	if (lfo_1 == 1) 
 	{
-		if (compareEnumToInt(LFO_frecEnum::sine, LFO_frec)) 
+		if (compareEnumToInt(waveLFOEnum::sine, waveLFO))
 		{
 			out_sin = Waves3(lfo_frec, 1, Amplitud);
 		}
-		else if (compareEnumToInt(LFO_frecEnum::square, LFO_frec))
+		else if (compareEnumToInt(waveLFOEnum::square, waveLFO))
 		{
 			out_sin = Waves3(lfo_frec, 2, Amplitud);
 		}
-		else if (compareEnumToInt(LFO_frecEnum::triangle, LFO_frec))
+		else if (compareEnumToInt(waveLFOEnum::triangle, waveLFO))
 		{
 			out_sin = Waves3(lfo_frec, 3, Amplitud);
 		}
-		else if (compareEnumToInt(LFO_frecEnum::sawtooth, LFO_frec))
+		else if (compareEnumToInt(waveLFOEnum::sawtooth, waveLFO))
 		{
 			out_sin = Waves3(lfo_frec, 4, Amplitud);
 		}
-		else if (compareEnumToInt(LFO_frecEnum::sawtooth_inverse, LFO_frec))
+		else if (compareEnumToInt(waveLFOEnum::sawtooth_inverse, waveLFO))
 		{
 			out_sin = Waves3(lfo_frec, 5, Amplitud);
 		}
@@ -802,10 +802,10 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::enableMute, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_1, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::amount_lfo, 0.300000);
-	setPresetParameter(preset->presetParameters, controlID::lfo_selec, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::lfo_selec, 1.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_frec, 5.000000);
-	setPresetParameter(preset->presetParameters, controlID::LFO_frec, -0.000000);
-	setPresetParameter(preset->presetParameters, controlID::BP_filter, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::waveLFO, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::BP_filter, -0.000000);
 	addPreset(preset);
 
 
