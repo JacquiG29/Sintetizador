@@ -44,7 +44,10 @@ enum controlID {
 	attack = 31,
 	decay = 32,
 	Sustain = 33,
-	release = 34
+	release = 34,
+	LFO_enable_2osc = 15,
+	EG_enabel_osc2 = 35,
+	volVU = 40
 };
 
 	// **--0x0F1F--**
@@ -397,6 +400,14 @@ public:
 		return out;
 	}
 
+	//-----------Variables para salidas---------------
+	double salida1=0;
+	double salida2 = 0;
+	double salidaBPF = 0;
+	double salidaEG_Osc1 = 0;
+	double salidaEG_Osc2 = 0;
+	double salidaGeneral = 0;
+
 	//------------ENVELOPE GENERATOR--------------------------
 	enum EnvelopeStage {
 		ENVELOPE_STAGE_OFF = 0,
@@ -409,6 +420,7 @@ public:
 	
 	bool ResetEG = 0;
 	double EnvelopeOut = 0;
+	double EnvelopeOut2 = 0;
 
 	double attack_offset = 0;
 	double decay_offset = 0;
@@ -433,18 +445,15 @@ public:
 
 	int current_stage=0;
 	int currentSampleIndex=0;
-	int nextStageSampleIndex=0;
-	int newStage=0;
+
+	int current_stage2 = 0;
+	int currentSampleIndex2 = 0;
+
+	double EnvOut1=0;
 	
 	double sampleRate;
 	//inline void setSampleRate(double d) {sampleRate = d; }
 
-	double m_dAttackTimeScalar=1;	// for velocity -> attack time mod
-	double m_dDecayTimeScalar=1;	// for note# -> decay time mod
-
-	bool m_bResetToZero; // return to zero
-	bool m_bLegatoMode;  // S-trigger
-	bool m_bOutputEG;
 	int Stage;
 
 	double StageEnvelopeOut(int Stage) {
@@ -491,6 +500,51 @@ public:
 			break;
 		}
 		return EnvelopeOut;
+	}
+	double StageEnvelopeOut2(int Stage) {
+		switch (Stage) {
+		case ENVELOPE_STAGE_OFF:
+			if (ResetEG)
+			{
+				EnvelopeOut2 = 0;
+			}
+			break;
+		case ENVELOPE_STAGE_ATTACK:
+			EnvelopeOut2 = attack_offset + EnvelopeOut2 * attack_coef;
+			if ((EnvelopeOut2 >= 1.0) || (attack_time <= 0.0))
+			{
+				EnvelopeOut2 = 1.0;
+				Stage = ENVELOPE_STAGE_DECAY;
+				break;
+			}
+			break;
+		case ENVELOPE_STAGE_DECAY:
+			EnvelopeOut2 = decay_offset + EnvelopeOut2 * decay_coef;
+			if ((EnvelopeOut2 <= Sustain) || (decay_time <= 0.0))
+			{
+				EnvelopeOut2 = Sustain;
+				Stage = ENVELOPE_STAGE_SUSTAIN;
+				break;
+			}
+			break;
+
+		case ENVELOPE_STAGE_SUSTAIN:
+			EnvelopeOut2 = Sustain;
+			break;
+		case ENVELOPE_STAGE_RELEASE:
+			EnvelopeOut2 = release_offset + EnvelopeOut2 * release_coef;
+			if ((EnvelopeOut2 <= 0.0) || (release_time <= 0.0))
+			{
+				EnvelopeOut2 = 0.0;
+				Stage = ENVELOPE_STAGE_OFF;
+				break;
+			}
+			break;
+			break;
+		default:
+			break;
+		}
+		return EnvelopeOut2;
 	}
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	
@@ -541,6 +595,15 @@ private:
 
 	int EG_enable = 0;
 	enum class EG_enableEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(EG_enableEnum::SWITCH_OFF, EG_enable)) etc... 
+
+	int LFO_enable_2osc = 0;
+	enum class LFO_enable_2oscEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(LFO_enable_2oscEnum::SWITCH_OFF, LFO_enable_2osc)) etc... 
+
+	int EG_enabel_osc2 = 0;
+	enum class EG_enabel_osc2Enum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(EG_enabel_osc2Enum::SWITCH_OFF, EG_enabel_osc2)) etc... 
+
+	// --- Meter Plugin Variables
+	float volVU = 0.f;
 
 	// **--0x1A7F--**
     // --- end member variables

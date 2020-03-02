@@ -15,7 +15,7 @@
 #include "oscilador.h"
 #include <string>
 #include <iostream>
-#include "EnvelopeGenerator.h"
+
 
 
 /**
@@ -75,7 +75,7 @@ bool PluginCore::initPluginParameters()
 	PluginParameter* piParam = nullptr;
 
 	// --- continuous control: Volumen
-	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 1.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&volumen, boundVariableType::kDouble);
@@ -164,14 +164,14 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- continuous control: l_freq_cut
-	piParam = new PluginParameter(controlID::l_freq_cut, "l_freq_cut", "Units", controlVariableType::kFloat, 200.000000, 5000.000000, 440.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::l_freq_cut, "l_freq_cut", "Hz", controlVariableType::kFloat, 200.000000, 5000.000000, 440.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&l_freq_cut, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- continuous control: h_freq_cut
-	piParam = new PluginParameter(controlID::h_freq_cut, "h_freq_cut", "Units", controlVariableType::kFloat, 300.000000, 5000.000000, 1500.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::h_freq_cut, "h_freq_cut", "Hz", controlVariableType::kFloat, 300.000000, 5000.000000, 1500.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&h_freq_cut, boundVariableType::kFloat);
@@ -184,31 +184,48 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- continuous control: Attack
-	piParam = new PluginParameter(controlID::attack, "Attack", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 1000.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::attack, "Attack", "", controlVariableType::kFloat, -800.000000, 5000.000000, 1000.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&attack, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- continuous control: Decay
-	piParam = new PluginParameter(controlID::decay, "Decay", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 100.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::decay, "Decay", "", controlVariableType::kFloat, -800.000000, 5000.000000, 100.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&decay, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- continuous control: Sustain
-	piParam = new PluginParameter(controlID::Sustain, "Sustain", "Units", controlVariableType::kFloat, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::Sustain, "Sustain", "", controlVariableType::kFloat, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&Sustain, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- continuous control: Release
-	piParam = new PluginParameter(controlID::release, "Release", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 0.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::release, "Release", "", controlVariableType::kFloat, -800.000000, 5000.000000, 0.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&release, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- discrete control: LFO_enable_2osc
+	piParam = new PluginParameter(controlID::LFO_enable_2osc, "LFO_enable_2osc", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&LFO_enable_2osc, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: EG_enable_osc2
+	piParam = new PluginParameter(controlID::EG_enabel_osc2, "EG_enable_osc2", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&EG_enabel_osc2, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- meter control: LED
+	piParam = new PluginParameter(controlID::volVU, "LED", 10.00, 100.00, ENVELOPE_DETECT_MODE_RMS, meterCal::kLogMeter);
+	piParam->setBoundVariable(&volVU, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- Aux Attributes
@@ -323,6 +340,21 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(2147483648);
 	setParamAuxAttribute(controlID::release, auxAttribute);
+
+	// --- controlID::LFO_enable_2osc
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741824);
+	setParamAuxAttribute(controlID::LFO_enable_2osc, auxAttribute);
+
+	// --- controlID::EG_enabel_osc2
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741824);
+	setParamAuxAttribute(controlID::EG_enabel_osc2, auxAttribute);
+
+	// --- controlID::volVU
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(201326592);
+	setParamAuxAttribute(controlID::volVU, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -543,7 +575,17 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	
 	}
 
-	osciladores = (y + y2) *y_n;
+
+	salida1 = y * y_n;
+
+	if (LFO_enable_2osc==1) {
+		salida2 = y2*y_n;
+	}
+	else {
+		salida2 = y2;
+	}
+
+	osciladores = salida1+salida2;
 
 	if (BP_filter == 1) 
 	{
@@ -599,27 +641,31 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 		else if (current_stage == dSamples_A) {
 			currentSampleIndex = 2;
 		}
-		else if ((current_stage> (dSamples_A+dSamples_D)))
-		{
-			currentSampleIndex = 4;
-		}
-		else if ((current_stage > (dSamples_A + dSamples_D+ dSamples_R))) {
-			currentSampleIndex = 0;			
-		}
-		//&& (osc1_on != 1)
+		else if (current_stage > (dSamples_A + dSamples_D)) {
+			currentSampleIndex = 3;
+		}	
 
-		StageEnvelopeOut(currentSampleIndex);
-		salida = EnvelopeOut * osciladores;
+		if (((current_stage> (dSamples_A+dSamples_D+ dSamples_R)))&&(EG_enabel_osc2==1))
+		{
+			currentSampleIndex =  4;
+		}
+			
+		//&& (osc1_on != 1)*/
+		salidaEG_Osc1 = StageEnvelopeOut(currentSampleIndex);
+		salida = (salidaEG_Osc1 * salida2)+(salida1);
 
 	}
 	else
 	{
 		current_stage = 0;
 		currentSampleIndex = 0;
+		current_stage2 = 0;
+		currentSampleIndex2 = 0;
 		StageEnvelopeOut(currentSampleIndex);
 	
 	}
 	
+	//volVU = Amplitud * (salida);
 	// --- fire any MIDI events for this sample interval
     processFrameInfo.midiEventQueue->fireMidiEvents(processFrameInfo.currentFrame);
 
@@ -635,8 +681,10 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 	{
 		// --- output silence: change this with your signal render code
 		processFrameInfo.audioOutputFrame[0] = Amplitud * (salida);
+		volVU = processFrameInfo.audioOutputFrame[0];
 		if (processFrameInfo.channelIOConfig.outputChannelFormat == kCFStereo)
 			processFrameInfo.audioOutputFrame[1] = Amplitud * (salida);
+			
 
 		return true;	/// processed
 	}
@@ -927,7 +975,7 @@ bool PluginCore::initPluginPresets()
 	// --- Preset: Factory Preset
 	preset = new PresetInfo(index++, "Factory Preset");
 	initPresetParameters(preset->presetParameters);
-	setPresetParameter(preset->presetParameters, controlID::volumen, 1.000000);
+	setPresetParameter(preset->presetParameters, controlID::volumen, 0.500000);
 	setPresetParameter(preset->presetParameters, controlID::waveform, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 440.000000);
 	setPresetParameter(preset->presetParameters, controlID::osc1_on, -0.000000);
@@ -948,6 +996,8 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::decay, 99.999939);
 	setPresetParameter(preset->presetParameters, controlID::Sustain, 0.500000);
 	setPresetParameter(preset->presetParameters, controlID::release, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::LFO_enable_2osc, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG_enabel_osc2, -0.000000);
 	addPreset(preset);
 
 

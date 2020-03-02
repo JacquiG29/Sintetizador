@@ -66,9 +66,6 @@
     <ClCompile Include="..\PluginKernel\oscilador.cpp">
       <Filter>Plugin Kernel\Plugin Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\PluginKernel\EnvelopeGenerator.cpp">
-      <Filter>Plugin Kernel\Plugin Core</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RAFX2 Source\RackAFXDLL.h">
@@ -126,9 +123,6 @@
       <Filter>Plugin Kernel\Plugin Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\AniSynth\synthfunctions.h">
-      <Filter>Plugin Kernel\Plugin Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PluginKernel\EnvelopeGenerator.h">
       <Filter>Plugin Kernel\Plugin Core</Filter>
     </ClInclude>
   </ItemGroup>

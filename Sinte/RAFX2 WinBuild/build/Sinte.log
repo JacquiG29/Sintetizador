@@ -2,6 +2,13 @@
   Rafx2Plugin.cpp
   RackAFXDLL.cpp
   plugincore.cpp
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(683,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(686,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(699,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(710,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(711,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(721,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\PluginKernel\plugincore.cpp(722,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating Code...
      Creating library C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.lib and object C:\Users\jacqu\Desktop\AUDIO\Sintetizador\Sintetizador\Sinte\RAFX2 WinBuild\\build\Sinte.exp
   Sinte.vcxproj -> C:\Users\jacqu\AppData\Roaming\RackAFX 7.0\PlugIns\Sinte.rafx2
