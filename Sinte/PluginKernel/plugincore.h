@@ -17,6 +17,8 @@
 #include "oscilador.h"
 #include <stdio.h>
 
+#define EG_DEFAULT_STATE_TIME 1000 // 1000 mSec
+
 // **--0x7F1F--**
 
 // --- Plugin Variables controlID Enumeration 
@@ -35,7 +37,14 @@ enum controlID {
 	lfo_selec = 12,
 	lfo_frec = 13,
 	waveLFO = 14,
-	BP_filter = 20
+	BP_filter = 20,
+	l_freq_cut = 21,
+	h_freq_cut = 22,
+	EG_enable = 30,
+	attack = 31,
+	decay = 32,
+	Sustain = 33,
+	release = 34
 };
 
 	// **--0x0F1F--**
@@ -155,8 +164,8 @@ public:
 
 	//variables para filtro pasa bandas
 	double Q_1 = 0;
-	double fch_1 = 1500;//frecuencia high
-	double fcl_1 = 1000;//frecuencia low
+	double fch_1 = 0;//frecuencia high
+	double fcl_1 = 0;//frecuencia low
 	double fc_1 = 0;//frecuencia de corte
 	double fb_1 = 0;//banda de frecuencias
 	double k_1 = 0;
@@ -168,7 +177,7 @@ public:
 	double a1_1 = 0;
 
 	double ganancia = 10;
-
+	double tiempo = 0;
 
 	//------------FUNCION PARA GENERAR ONDAS EN OSCILADOR Y LFO--------------------------
 	double Waves(double frecuencia, int tipo,double vol)
@@ -387,6 +396,102 @@ public:
 
 		return out;
 	}
+
+	//------------ENVELOPE GENERATOR--------------------------
+	enum EnvelopeStage {
+		ENVELOPE_STAGE_OFF = 0,
+		ENVELOPE_STAGE_ATTACK,
+		ENVELOPE_STAGE_DECAY,
+		ENVELOPE_STAGE_SUSTAIN,
+		ENVELOPE_STAGE_RELEASE,
+		SHUTDOWN
+	};
+	
+	bool ResetEG = 0;
+	double EnvelopeOut = 0;
+
+	double attack_offset = 0;
+	double decay_offset = 0;
+	double release_offset = 0;
+
+	double attack_coef = 0;
+	double decay_coef = 0;	
+	double release_coef = 0;
+
+	double attack_time = EG_DEFAULT_STATE_TIME;
+	double decay_time = EG_DEFAULT_STATE_TIME;
+	double release_time = EG_DEFAULT_STATE_TIME;
+
+	double attack_TCO = 0.99999;
+	double decay_TCO = exp(-11.05);
+	double release_TCO = exp(-11.05);
+	
+
+	double dSamples_A=0.0;
+	double dSamples_D=0.0;
+	double dSamples_R=0.0;
+
+	int current_stage=0;
+	int currentSampleIndex=0;
+	int nextStageSampleIndex=0;
+	int newStage=0;
+	
+	double sampleRate;
+	//inline void setSampleRate(double d) {sampleRate = d; }
+
+	double m_dAttackTimeScalar=1;	// for velocity -> attack time mod
+	double m_dDecayTimeScalar=1;	// for note# -> decay time mod
+
+	bool m_bResetToZero; // return to zero
+	bool m_bLegatoMode;  // S-trigger
+	bool m_bOutputEG;
+	int Stage;
+
+	double StageEnvelopeOut(int Stage) {
+		switch (Stage) {
+		case ENVELOPE_STAGE_OFF:
+			if (ResetEG)
+			{
+				EnvelopeOut = 0;
+			}
+			break;
+		case ENVELOPE_STAGE_ATTACK:
+			EnvelopeOut = attack_offset + EnvelopeOut * attack_coef;
+			if ((EnvelopeOut >= 1.0) || (attack_time <= 0.0))
+			{
+				EnvelopeOut = 1.0;
+				Stage = ENVELOPE_STAGE_DECAY;
+				break;
+			}
+			break;
+		case ENVELOPE_STAGE_DECAY:
+			EnvelopeOut = decay_offset + EnvelopeOut * decay_coef;
+			if ((EnvelopeOut <= Sustain) || (decay_time <= 0.0))
+			{
+				EnvelopeOut = Sustain;
+				Stage = ENVELOPE_STAGE_SUSTAIN;
+				break;
+			}
+			break;
+
+		case ENVELOPE_STAGE_SUSTAIN:
+			EnvelopeOut = Sustain;
+			break;
+		case ENVELOPE_STAGE_RELEASE:
+			EnvelopeOut = release_offset + EnvelopeOut * release_coef;
+			if ((EnvelopeOut <= 0.0) || (release_time <= 0.0))
+			{
+				EnvelopeOut = 0.0;
+				Stage = ENVELOPE_STAGE_OFF;
+				break;
+			}
+			break;
+			break;
+		default:
+			break;
+		}
+		return EnvelopeOut;
+	}
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 	
 
@@ -399,6 +504,12 @@ private:
 	float frec2 = 0.f;
 	float amount_lfo = 0.f;
 	float lfo_frec = 0.f;
+	float l_freq_cut = 0.f;
+	float h_freq_cut = 0.f;
+	float attack = 0.f;
+	float decay = 0.f;
+	float Sustain = 0.f;
+	float release = 0.f;
 
 	// --- Discrete Plugin Variables 
 	int waveform = 0;
@@ -427,6 +538,9 @@ private:
 
 	int BP_filter = 0;
 	enum class BP_filterEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(BP_filterEnum::SWITCH_OFF, BP_filter)) etc... 
+
+	int EG_enable = 0;
+	enum class EG_enableEnum { SWITCH_OFF,SWITCH_ON };	// to compare: if(compareEnumToInt(EG_enableEnum::SWITCH_OFF, EG_enable)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

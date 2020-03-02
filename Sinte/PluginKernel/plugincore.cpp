@@ -14,6 +14,9 @@
 #include "plugindescription.h"
 #include "oscilador.h"
 #include <string>
+#include <iostream>
+#include "EnvelopeGenerator.h"
+
 
 /**
 \brief PluginCore constructor is launching pad for object initialization
@@ -72,7 +75,7 @@ bool PluginCore::initPluginParameters()
 	PluginParameter* piParam = nullptr;
 
 	// --- continuous control: Volumen
-	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::volumen, "Volumen", "", controlVariableType::kDouble, 0.000000, 1.000000, 1.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&volumen, boundVariableType::kDouble);
@@ -85,7 +88,7 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- continuous control: Frecuencia
-	piParam = new PluginParameter(controlID::Frecuencia_Hz, "Frecuencia", "Hz", controlVariableType::kFloat, 200.000000, 6000.000000, 500.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::Frecuencia_Hz, "Frecuencia", "Hz", controlVariableType::kFloat, 200.000000, 6000.000000, 440.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&Frecuencia_Hz, boundVariableType::kFloat);
@@ -104,7 +107,7 @@ bool PluginCore::initPluginParameters()
 	addPluginParameter(piParam);
 
 	// --- continuous control: Frecuencia_Osc2
-	piParam = new PluginParameter(controlID::frec2, "Frecuencia_Osc2", "Hz", controlVariableType::kFloat, 100.000000, 6000.000000, 500.000000, taper::kLinearTaper);
+	piParam = new PluginParameter(controlID::frec2, "Frecuencia_Osc2", "Hz", controlVariableType::kFloat, 100.000000, 6000.000000, 392.000000, taper::kLinearTaper);
 	piParam->setParameterSmoothing(true);
 	piParam->setSmoothingTimeMsec(20.00);
 	piParam->setBoundVariable(&frec2, boundVariableType::kFloat);
@@ -158,6 +161,54 @@ bool PluginCore::initPluginParameters()
 	piParam = new PluginParameter(controlID::BP_filter, "Filtro_Pasa_Bandas", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
 	piParam->setBoundVariable(&BP_filter, boundVariableType::kInt);
 	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- continuous control: l_freq_cut
+	piParam = new PluginParameter(controlID::l_freq_cut, "l_freq_cut", "Units", controlVariableType::kFloat, 200.000000, 5000.000000, 440.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&l_freq_cut, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- continuous control: h_freq_cut
+	piParam = new PluginParameter(controlID::h_freq_cut, "h_freq_cut", "Units", controlVariableType::kFloat, 300.000000, 5000.000000, 1500.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&h_freq_cut, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- discrete control: EG_enable
+	piParam = new PluginParameter(controlID::EG_enable, "EG_enable", "SWITCH OFF,SWITCH ON", "SWITCH OFF");
+	piParam->setBoundVariable(&EG_enable, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Attack
+	piParam = new PluginParameter(controlID::attack, "Attack", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 1000.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&attack, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Decay
+	piParam = new PluginParameter(controlID::decay, "Decay", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 100.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&decay, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Sustain
+	piParam = new PluginParameter(controlID::Sustain, "Sustain", "Units", controlVariableType::kFloat, 0.000000, 1.000000, 0.500000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&Sustain, boundVariableType::kFloat);
+	addPluginParameter(piParam);
+
+	// --- continuous control: Release
+	piParam = new PluginParameter(controlID::release, "Release", "Units", controlVariableType::kFloat, -800.000000, 5000.000000, 0.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(true);
+	piParam->setSmoothingTimeMsec(20.00);
+	piParam->setBoundVariable(&release, boundVariableType::kFloat);
 	addPluginParameter(piParam);
 
 	// --- Aux Attributes
@@ -237,6 +288,41 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(1073741826);
 	setParamAuxAttribute(controlID::BP_filter, auxAttribute);
+
+	// --- controlID::l_freq_cut
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::l_freq_cut, auxAttribute);
+
+	// --- controlID::h_freq_cut
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::h_freq_cut, auxAttribute);
+
+	// --- controlID::EG_enable
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(1073741824);
+	setParamAuxAttribute(controlID::EG_enable, auxAttribute);
+
+	// --- controlID::attack
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::attack, auxAttribute);
+
+	// --- controlID::decay
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::decay, auxAttribute);
+
+	// --- controlID::Sustain
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::Sustain, auxAttribute);
+
+	// --- controlID::release
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::release, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -461,6 +547,9 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 
 	if (BP_filter == 1) 
 	{
+		fch_1 = h_freq_cut;//frecuencia high
+		fcl_1 = l_freq_cut;//frecuencia low
+
 		double fs = audioProcDescriptor.sampleRate;
 		fb_1 = fch_1 - fcl_1;
 		fc_1 = (fch_1 + fcl_1) / 2;
@@ -484,10 +573,56 @@ bool PluginCore::processAudioFrame(ProcessFrameInfo& processFrameInfo)
 		salida = osciladores;
 	}
 	
+	if (EG_enable == 1)
+	{
 
+		//calcular constante de ATTACK
+		//muestras del exponential rate
+		dSamples_A = audioProcDescriptor.sampleRate * ((attack_time+attack)/ 1000.0);
+		attack_coef = exp(-log((1.0 + attack_TCO) / attack_TCO) / dSamples_A);
+		attack_offset = (1.0 + attack_TCO) * (1.0 - attack_coef);
 
+		//calcular constante de DECAY
+		dSamples_D = audioProcDescriptor.sampleRate * ((decay_time+decay)/ 1000.0);
+		decay_coef= exp(-log((1.0 + decay_TCO) / decay_TCO) / dSamples_D);
+		decay_offset = (Sustain - decay_TCO) * (1.0 - decay_coef);
+
+		//calcular constante de RELEASE
+		dSamples_R = audioProcDescriptor.sampleRate * ((release_time+release)/ 1000.0);
+		release_coef = exp(-log((1.0 + release_TCO) / release_TCO) / dSamples_R);
+		release_offset = -release_TCO * (1.0 - release_coef);
+		
+		current_stage = current_stage + 1;
+		if (current_stage < dSamples_A) {
+			currentSampleIndex = 1;
+		}
+		else if (current_stage == dSamples_A) {
+			currentSampleIndex = 2;
+		}
+		else if ((current_stage> (dSamples_A+dSamples_D)))
+		{
+			currentSampleIndex = 4;
+		}
+		else if ((current_stage > (dSamples_A + dSamples_D+ dSamples_R))) {
+			currentSampleIndex = 0;			
+		}
+		//&& (osc1_on != 1)
+
+		StageEnvelopeOut(currentSampleIndex);
+		salida = EnvelopeOut * osciladores;
+
+	}
+	else
+	{
+		current_stage = 0;
+		currentSampleIndex = 0;
+		StageEnvelopeOut(currentSampleIndex);
+	
+	}
+	
 	// --- fire any MIDI events for this sample interval
     processFrameInfo.midiEventQueue->fireMidiEvents(processFrameInfo.currentFrame);
+
 
 	// --- do per-frame updates; VST automation and parameter smoothing
 	doSampleAccurateParameterUpdates();
@@ -792,12 +927,12 @@ bool PluginCore::initPluginPresets()
 	// --- Preset: Factory Preset
 	preset = new PresetInfo(index++, "Factory Preset");
 	initPresetParameters(preset->presetParameters);
-	setPresetParameter(preset->presetParameters, controlID::volumen, 0.500000);
+	setPresetParameter(preset->presetParameters, controlID::volumen, 1.000000);
 	setPresetParameter(preset->presetParameters, controlID::waveform, -0.000000);
-	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 500.000000);
+	setPresetParameter(preset->presetParameters, controlID::Frecuencia_Hz, 440.000000);
 	setPresetParameter(preset->presetParameters, controlID::osc1_on, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::wave2, -0.000000);
-	setPresetParameter(preset->presetParameters, controlID::frec2, 500.000000);
+	setPresetParameter(preset->presetParameters, controlID::frec2, 392.000000);
 	setPresetParameter(preset->presetParameters, controlID::osc2_on, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::enableMute, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo_1, -0.000000);
@@ -806,6 +941,13 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::lfo_frec, 5.000000);
 	setPresetParameter(preset->presetParameters, controlID::waveLFO, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::BP_filter, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::l_freq_cut, 440.000000);
+	setPresetParameter(preset->presetParameters, controlID::h_freq_cut, 1500.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG_enable, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::attack, 999.999878);
+	setPresetParameter(preset->presetParameters, controlID::decay, 99.999939);
+	setPresetParameter(preset->presetParameters, controlID::Sustain, 0.500000);
+	setPresetParameter(preset->presetParameters, controlID::release, 0.000000);
 	addPreset(preset);
 
 
